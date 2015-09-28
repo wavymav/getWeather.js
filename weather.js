@@ -3,7 +3,7 @@ var http = require('http'),
 		apiKey = require('./apiKey');
 
 // Setting up the http .get() method
-var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us=' + apiKey, function(res) {
+var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us&units=imperial=' + apiKey, function(res) {
 	console.log(res.statusCode);
 
 	// declaring and empty string called bodyData to store the enitre reponse body data form the stream chunks.
@@ -16,7 +16,12 @@ var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us=
 
 	// Using the 'end' event handler to access the data stored in bodyData after the concatenation of data complets in the 'data' event handler.
 	res.on('end', function() {
-		console.log(bodyData);
+		// Parsing the JSON data & storing it in weatherData var
+		var weatherData = JSON.parse(bodyData);
+
+		// logging the property values of the API
+		console.log(weatherData.main.temp);
+		console.log(weatherData.name);
 	});
 });
 
