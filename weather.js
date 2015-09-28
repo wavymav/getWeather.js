@@ -13,6 +13,11 @@ var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us=
 		// Concats the each data chunk to the bodyData var
 		bodyData += data;
 	});
+
+	// Using the 'end' event handler to access the data stored in bodyData after the concatenation of data complets in the 'data' event handler.
+	res.on('end', function() {
+		console.log(bodyData);
+	});
 });
 
 // Handles any errors that may occur on the request object
