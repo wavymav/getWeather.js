@@ -5,6 +5,14 @@ var http = require('http'),
 // Setting up the http .get() method
 var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us=' + apiKey, function(res) {
 	console.log(res.statusCode);
+
+	// declaring and empty string called bodyData to store the enitre reponse body data form the stream chunks.
+	var bodyData = '';
+	// Using the 'data' event handler to pass in the chunks of data from the response.
+	res.on('data', function(data) {
+		// Concats the each data chunk to the bodyData var
+		bodyData += data;
+	});
 });
 
 // Handles any errors that may occur on the request object
