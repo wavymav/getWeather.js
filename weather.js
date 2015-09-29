@@ -42,7 +42,7 @@ var get = function(zipcode) {
 							location = weatherData.name;
 
 					// Invoking the consoleMessage() with the property values of weatherData
-					consoleLog.Message(location, temperature);
+					consoleLog.message(location, temperature);
 
 				} catch (err) {
 					// Cating the parse error
