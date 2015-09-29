@@ -4,7 +4,6 @@ var http = require('http'),
 
 // Converts the number data type into a string data type
 var convertToString =  function(number) {
-	// Converts the passed in number into a string data type
 	var string = number.toString();
 
 	return string;
@@ -32,17 +31,27 @@ var consoleMessage = function(cityName, cureentTemperature) {
 	console.log(message);
 };
 
+// logging out the error message
+var errorConsoleMessage = function(error) {
+	console.error('problem with request: ' + error.message);
+};
+
 // Setting up the http .get() method
-var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us&units=imperial=' + apiKey, function(res) {
+var req = http.get('api.openweathermap.org/data/2.5/weather?zip=20721,us&units=imperial=' + apiKey, function(res) {
 	console.log(res.statusCode);
 
 	// declaring and empty string called bodyData to store the enitre reponse body data form the stream chunks.
 	var bodyData = '';
+
+	// =====================================================================
+
 	// Using the 'data' event handler to pass in the chunks of data from the response.
 	res.on('data', function(data) {
 		// Concats the each data chunk to the bodyData var
 		bodyData += data;
 	});
+
+	// =====================================================================
 
 	// Using the 'end' event handler to access the data stored in bodyData after the concatenation of data complets in the 'data' event handler.
 	res.on('end', function() {
@@ -59,7 +68,4 @@ var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us&
 });
 
 // Handles any errors that may occur on the request object
-req.on('error', function(err) {
-	// Logs the error to the command line
-	console.log('Got an error: ' + err.message);
-});
+req.on('error', errorConsoleMessage);
