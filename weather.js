@@ -2,11 +2,33 @@
 var http = require('http'),
 		apiKey = require('./apiKey');
 
+// Converts the number data type into a string data type
+var convertToString =  function(number) {
+	// Converts the passed in number into a string data type
+	var string = number.toString();
+
+	return string;
+};
+
+// removes the deciaml and digits from the temperature string passed in
+var removeDecimalAndDigits = function(number) {
+	var	string = convertToString(number),
+	// finds the index of the deciaml or ('.' character) in the string
+			endIndex = string.indexOf('.'),
+	// uses the number value in endIndex as the endpoint of the slice method
+			value = string.slice(0, endIndex);
+
+	return value;
+};
+
 // consoleMessage() logs the message of the current weather in a specific location
 var consoleMessage = function(cityName, cureentTemperature) {
-	var message = 'The current temperature in ' +
+
+	var temp = removeDecimalAndDigits(cureentTemperature),
+			message = 'The current temperature in ' +
 								cityName + ' is ' +
-								cureentTemperature + '°F';
+								temp + '°F';
+
 	console.log(message);
 };
 
@@ -27,7 +49,7 @@ var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us&
 		// Parsing the JSON data & storing it in weatherData var
 		var weatherData = JSON.parse(bodyData);
 
-		// storing the weatherData property values for current temperatur & location
+		// storing the weatherData property values for current temperature & location
 		var temperature = weatherData.main.temp,
 				location = weatherData.name;
 
