@@ -33,18 +33,20 @@ var consoleMessage = function(cityName, cureentTemperature) {
 
 // logging out the error message
 var errorConsoleMessage = function(error) {
-	console.error('problem with request: ' + error.message);
+	console.error('There was an error: ' + error.message);
 };
 
-// Setting up the http .get() method
-var req = http.get('api.openweathermap.org/data/2.5/weather?zip=20721,us&units=imperial=' + apiKey, function(res) {
-	console.log(res.statusCode);
+// =======================================================================
 
-	// declaring and empty string called bodyData to store the enitre reponse body data form the stream chunks.
-	var bodyData = '';
+// Setting up the http .get() method
+var req = http.get('http://.openweathermap.org/data/2.5/weather?zip=20740,us&units=imperial=' + apiKey, function(res) {
+	console.log(res.statusCode);
 
 	// =====================================================================
 
+	// declaring and empty string called bodyData to store the enitre reponse body data
+	// form the stream chunks.
+	var bodyData = '';
 	// Using the 'data' event handler to pass in the chunks of data from the response.
 	res.on('data', function(data) {
 		// Concats the each data chunk to the bodyData var
@@ -53,19 +55,28 @@ var req = http.get('api.openweathermap.org/data/2.5/weather?zip=20721,us&units=i
 
 	// =====================================================================
 
-	// Using the 'end' event handler to access the data stored in bodyData after the concatenation of data complets in the 'data' event handler.
+	// Using the 'end' event handler to access the data stored in bodyData after the
+	// concatenation of data complets in the 'data' event handler.
 	res.on('end', function() {
-		// Parsing the JSON data & storing it in weatherData var
-		var weatherData = JSON.parse(bodyData);
+		// Using the try catch block to find any parsing errors
+		try {
+			// Parsing the JSON data & storing it in weatherData var
+			var weatherData = JSON.parse(bodyData);
 
-		// storing the weatherData property values for current temperature & location
-		var temperature = weatherData.main.temp,
-				location = weatherData.name;
+			// storing the weatherData property values for current temperature & location
+			var temperature = weatherData.main.temp,
+					location = weatherData.name;
 
-		// Invoking the consoleMessage() with the property values of weatherData
-		consoleMessage(location, temperature);
+			// Invoking the consoleMessage() with the property values of weatherData
+			consoleMessage(location, temperature);
+
+		} catch (err) {
+			// Cating the parse error
+			// Invoking the errorConsoleMessage()
+			errorConsoleMessage(err);
+		}
 	});
 });
 
-// Handles any errors that may occur on the request object
+// Handles any errors that may occur on the request object for the connection
 req.on('error', errorConsoleMessage);
