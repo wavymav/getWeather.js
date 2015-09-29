@@ -2,6 +2,14 @@
 var http = require('http'),
 		apiKey = require('./apiKey');
 
+// consoleMessage() logs the message of the current weather in a specific location
+var consoleMessage = function(cityName, cureentTemperature) {
+	var message = 'The current temperature in ' +
+								cityName + ' is ' +
+								cureentTemperature + '°F';
+	console.log(message);
+};
+
 // Setting up the http .get() method
 var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us&units=imperial=' + apiKey, function(res) {
 	console.log(res.statusCode);
@@ -19,9 +27,12 @@ var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20721,us&
 		// Parsing the JSON data & storing it in weatherData var
 		var weatherData = JSON.parse(bodyData);
 
-		// logging the property values of the API
-		console.log(weatherData.main.temp);
-		console.log(weatherData.name);
+		// storing the weatherData property values for current temperatur & location
+		var temperature = weatherData.main.temp,
+				location = weatherData.name;
+
+		// Invoking the consoleMessage() with the property values of weatherData
+		consoleMessage(location, temperature);
 	});
 });
 
