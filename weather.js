@@ -1,45 +1,14 @@
 // Requiring one of Node's built in modules 'http'
+// Requiring my OpenWeatherMapAPI
+// Requiring my both message() & errorMessage()
 var http = require('http'),
 		apiKey = require('./apiKey');
-
-// Converts the number data type into a string data type
-var convertToString =  function(number) {
-	var string = number.toString();
-
-	return string;
-};
-
-// removes the deciaml and digits from the temperature string passed in
-var removeDecimalAndDigits = function(number) {
-	var	string = convertToString(number),
-	// finds the index of the deciaml or ('.' character) in the string
-			endIndex = string.indexOf('.'),
-	// uses the number value in endIndex as the endpoint of the slice method
-			value = string.slice(0, endIndex);
-
-	return value;
-};
-
-// consoleMessage() logs the message of the current weather in a specific location
-var consoleMessage = function(cityName, cureentTemperature) {
-
-	var temp = removeDecimalAndDigits(cureentTemperature),
-			message = 'The current temperature in ' +
-								cityName + ' is ' +
-								temp + '°F';
-
-	console.log(message);
-};
-
-// logging out the error message
-var errorConsoleMessage = function(error) {
-	console.error('There was an error: ' + error.message);
-};
+		consoleLog = require('./consoleHelpers');
 
 // =======================================================================
 
 // Setting up the http .get() method
-var req = http.get('http://api.openweathermap.org/data/2.5/weather1212?zip=20740,us&units=imperial=' + apiKey, function(res) {
+var req = http.get('http://api.openweathermap.org/data/2.5/weather?zip=20740,us&units=imperial=' + apiKey, function(res) {
 	console.log(res.statusCode);
 	console.log(http.STATUS_CODES[res.statusCode]);
 
@@ -72,19 +41,19 @@ var req = http.get('http://api.openweathermap.org/data/2.5/weather1212?zip=20740
 						location = weatherData.name;
 
 				// Invoking the consoleMessage() with the property values of weatherData
-				consoleMessage(location, temperature);
+				consoleLog.Message(location, temperature);
 
 			} catch (err) {
 				// Cating the parse error
 				// Invoking the errorConsoleMessage()
-				errorConsoleMessage(err);
+				consoleLog.errorMessage(err);
 			}
 		} else {
 			// logging out the response status code description if it's not 200 (OK)
-			errorConsoleMessage({message: 'There was an error with the reponse! ('+ http.STATUS_CODES[res.statusCode] +')'});
+			consoleLog.errorMessage({message: 'There was an error with the reponse! ('+ http.STATUS_CODES[res.statusCode] +')'});
 		}
 	});
 });
 
 // Handles any errors that may occur on the request object for the connection
-req.on('error', errorConsoleMessage);
+req.on('error', consoleLog.errorMessage);
