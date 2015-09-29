@@ -1,14 +1,14 @@
 var exports = module.exports = {};
 
 // Converts the number data type into a string data type
-convertToString =  function(number) {
+var convertToString =  function(number) {
 	var string = number.toString();
 
 	return string;
 };
 
 // removes the deciaml and digits from the temperature string passed in
-removeDecimalAndDigits = function(number) {
+var removeDecimalAndDigits = function(number) {
 	var	string = convertToString(number),
 	// finds the index of the deciaml or ('.' character) in the string
 			endIndex = string.indexOf('.'),
